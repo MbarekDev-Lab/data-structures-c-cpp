@@ -9,5 +9,6 @@
 #define ArraysRep_hpp
 
 void arrayRepresentation();
+void two_dimensional_array();
 
 #endif /* ArraysRep_hpp */
