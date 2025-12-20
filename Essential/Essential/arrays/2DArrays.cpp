@@ -16,7 +16,6 @@ void two_dimensional_array() {
       {4, 5, 6, 4},
       {4, 5, 6, 4},
   };
-
   // Declare a pointer array
   int *B[3];
 
@@ -44,6 +43,7 @@ void two_dimensional_array() {
   }*/
 
   C = (int **)malloc(3 * sizeof(int *));
+
   C[0] = (int *)malloc(4 * sizeof(int));
   C[1] = (int *)malloc(4 * sizeof(int));
   C[2] = (int *)malloc(4 * sizeof(int));
@@ -55,4 +55,12 @@ void two_dimensional_array() {
     }
     printf("\n");
   }
+
+  unsigned int x[4][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
+
+  printf("%u,%u, %u", x + 3, *(x + 3), *(x + 2) + 3);
+
+  /*
+    C[i][j]=k=0∑n−1​A[i][k]×B[k][j]
+  */
 }

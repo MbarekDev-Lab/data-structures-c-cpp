@@ -7,9 +7,8 @@
 
 #include <cstdlib>
 #include <iostream>
-
-#include "arrays/ArraysRep.hpp"
 #include "arrays/2DArrays.hpp"
+#include "arrays/ArraysRep.hpp"
 #include "quiz/Quiz.hpp"
 #include "recursion/Combinatorics.hpp"
 
@@ -37,11 +36,6 @@ int main(int argc, const char *argv[]) {
 
   // Demonstrate 2D array
   two_dimensional_array();
-
-
-
-
-
 
   return EXIT_SUCCESS;
 }
