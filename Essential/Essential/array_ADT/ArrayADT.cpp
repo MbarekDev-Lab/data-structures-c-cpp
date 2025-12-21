@@ -76,7 +76,6 @@ void demo_fixed_array() {
 // ============================================================================
 void demo_dynamic_array() {
   printf("\n=== DEMO: Dynamic Array (Pointer-based) ===\n");
-
   struct Array arr;
 
   // Must allocate memory first before using
@@ -107,7 +106,6 @@ void demo_dynamic_array() {
   // CANNOT do this:
   // struct Array arr = {{1, 2, 3}, 10, 3};  // ERROR: Can't initialize pointer
   // with {}
-
   // Clean up
   free(arr.A);
 }
@@ -156,15 +154,88 @@ void demo_interactive() {
 }
 
 // ============================================================================
+// INTERACTIVE DEMO: Dynamic Array with user input
+// ============================================================================
+
+void Delete(struct Array *arr, int index);
+int Get(struct Array arr, int index);
+void Set(struct Array *arr, int index, int x);
+int Max(struct Array arr);
+int Min(struct Array arr);
+float Avg(struct Array arr);
+void Reverse(struct Array *arr);
+void Reverse2(struct Array *arr);
+
+void Append(struct Array *arr, int x) {
+  if (arr->length < arr->size) {
+    arr->A[arr->length] = x;
+    arr->length++;
+  } else {
+    printf("Error: Array is full\n");
+  }
+}
+
+void Insert(struct Array *arr, int index, int x) {
+  int i;
+  if (index >= 0 && index <= arr->length) {
+    for (i = arr->length; i > index; i--) {
+      arr->A[i] = arr->A[i - 1];
+    }
+    arr->A[index] = x;
+    arr->length++;
+  }
+}
+
+void insertAppend_demo() {
+  printf("\n=== DEMO: Insert and Append Operations ===\n");
+  
+  // Create a dynamic array (Insert works with struct Array, not ArrayFix)
+  struct Array arr;
+  arr.size = 10;
+  arr.length = 5;
+  arr.A = (int *)malloc(arr.size * sizeof(int));
+  
+  // Initialize with some values
+  int initial[] = {1, 2, 3, 4, 5};
+  for (int i = 0; i < arr.length; i++) {
+    arr.A[i] = initial[i];
+  }
+  
+  printf("Initial array: ");
+  display(arr);
+  
+  // Test Append
+  printf("\nAppending 6...\n");
+  Append(&arr, 6);
+  display(arr);
+  
+  // Test Insert at index 2
+  printf("\nInserting 99 at index 2...\n");
+  Insert(&arr, 2, 99);
+  display(arr);
+  
+  // Test Insert at beginning
+  printf("\nInserting 0 at index 0...\n");
+  Insert(&arr, 0, 0);
+  display(arr);
+  
+  // Clean up
+  free(arr.A);
+}
+
+// ============================================================================
 // MAIN DEMO FUNCTION
 // ============================================================================
 void arraysADT_demo() {
-  std::cout << "\n=== Array ADT Demo ===\n";
+  std::cout << "\n=== start Array ADT Demo ===\n";
 
   // Show both concepts
-  demo_fixed_array();
-  demo_dynamic_array();
+  // demo_fixed_array();
+
+  // demo_dynamic_array();
 
   // Interactive demo
-  demo_interactive();
+  // demo_interactive();
+
+  insertAppend_demo();
 }
