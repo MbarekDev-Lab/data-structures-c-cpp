@@ -379,6 +379,99 @@ int LinearSearch(struct Array arr, int key) {
   return -1; // Return -1 if not found
 }
 
+int BinarySearch(struct Array arr, int key) {
+  int l, mid, h;
+  l = 0;
+  h = arr.length - 1;
+
+  while (l <= h) {
+    mid = (l + h) / 2;
+    if (key == arr.A[mid]) {
+      return mid;
+    } else if (key < arr.A[mid]) {
+      h = mid - 1;
+    } else {
+      l = mid + 1;
+    }
+  }
+  return -1;
+}
+
+int LinearSearch(int a[], int l, int h, int key) {
+  int mid;
+  if (l <= h) {
+    mid = (l + h) / 2;
+    if (key == a[mid]) {
+      return mid;
+    } else if (key < a[mid]) {
+      return LinearSearch(a, l, mid - 1, key);
+    } else {
+      return LinearSearch(a, mid + 1, h, key);
+    }
+  }
+  return -1;
+}
+
+int Get(struct Array arr, int index) {
+  if (index >= 0 && index < arr.length) {
+    return arr.A[index];
+  } else {
+    return -1;
+  }
+
+  return -1;
+}
+
+// ============================================================================
+// MAIN DEMO FUNCTION
+// ============================================================================
+void arraysADT_demo() {
+  std::cout << "\n=== start Array ADT Demo ===\n";
+
+  // Show both concepts
+  // demo_fixed_array();
+
+  // demo_dynamic_array();
+
+  // Interactive demo
+  // demo_interactive();
+
+  // Demonstrate -> operator (stack vs heap)
+  demo_pointer_operator();
+
+  insertAppend_demo();
+
+  // Demonstrate Delete operation
+  demo_delete();
+
+  struct Array arr;
+  arr.size = 10;
+  arr.length = 5;
+  arr.A = (int *)malloc(arr.size * sizeof(int));
+  if (arr.A == nullptr) {
+    printf("Memory allocation failed for demo array\n");
+    return;
+  }
+  int demo_vals[] = {10, 20, 30, 40, 50};
+  for (int i = 0; i < arr.length; i++) {
+    arr.A[i] = demo_vals[i];
+  }
+
+  printf("%d\n", LinearSearch(arr, 15));
+  display(arr);
+
+  printf("%d\n", LinearSearch(arr, 10));
+  display(arr);
+
+  printf("%d\n", LinearSearch(arr.A, 0, arr.length, 5));
+  display(arr); // we got index
+
+  free(arr.A);
+
+  std::cout << "\n=== end Array ADT Demo ===\n";
+}
+
+/*
 // ============================================================================
 // MAIN DEMO FUNCTION
 // ============================================================================
@@ -406,5 +499,9 @@ void arraysADT_demo() {
   printf("%d\n", LinearSearch(arr, 15));
   display(arr);
 
+  printf("%d\n", LinearSearch(arr, 10));
+  display(arr);
+
   std::cout << "\n=== end Array ADT Demo ===\n";
 }
+*/
