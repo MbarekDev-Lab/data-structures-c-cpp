@@ -34,10 +34,11 @@ struct ArrayFix {
 };
 
 // Display function for dynamic array
-void display(struct Array arr) {
+void display(struct Array *arr) {
   printf("\n[Dynamic Array] Elements are: ");
-  for (int i = 0; i < arr.length; i++) {
-    printf("%d ", arr.A[i]);
+
+  for (int i = 0; i < arr->length; i++) {
+    printf("%d ", arr->A[i]);
   }
   printf("\n");
 }
@@ -96,7 +97,7 @@ void demo_dynamic_array() {
   }
 
   printf("Initialized with: ");
-  display(arr);
+  display(&arr);
 
   // Can resize dynamically
   arr.size = 20;
@@ -147,7 +148,7 @@ void demo_interactive() {
 
   arr.length = n;
 
-  display(arr);
+  display(&arr);
 
   // Clean up
   free(arr.A);
@@ -273,22 +274,22 @@ void insertAppend_demo() {
   }
 
   printf("Initial array: ");
-  display(arr);
+  display(&arr);
 
   // Test Append
   printf("\nAppending 6...\n");
   Append(&arr, 6);
-  display(arr);
+  display(&arr);
 
   // Test Insert at index 2
   printf("\nInserting 99 at index 2...\n");
   Insert(&arr, 2, 99);
-  display(arr);
+  display(&arr);
 
   // Test Insert at beginning
   printf("\nInserting 0 at index 0...\n");
   Insert(&arr, 0, 0);
-  display(arr);
+  display(&arr);
 
   // Clean up
   free(arr.A);
@@ -332,28 +333,28 @@ void demo_delete() {
   }
 
   printf("Initial array: ");
-  display(arr);
+  display(&arr);
 
   // Delete element at index 2 (value 30)
   printf("\nDeleting element at index 2...\n");
   int deleted = Delete(&arr, 2);
   printf("Deleted value: %d\n", deleted);
   printf("Array after deletion: ");
-  display(arr);
+  display(&arr);
 
   // Delete element at index 0 (first element)
   printf("\nDeleting element at index 0...\n");
   deleted = Delete(&arr, 0);
   printf("Deleted value: %d\n", deleted);
   printf("Array after deletion: ");
-  display(arr);
+  display(&arr);
 
   // Try invalid index
   printf("\nTrying to delete at invalid index 10...\n");
   deleted = Delete(&arr, 10);
   printf("Returned value: %d (0 means invalid index)\n", deleted);
   printf("Array unchanged: ");
-  display(arr);
+  display(&arr);
 
   free(arr.A);
 }
@@ -508,113 +509,153 @@ void Reverse2(struct Array *arr) {
   }
 }
 
+void InsertSort(struct Array *arr, int x) {
+  int i = arr->length - 1;
 
+  if (arr->length == arr->size) {
+    return;
+  }
+
+  while (i >= 0 && arr->A[i] > x) {
+    arr->A[i + 1] = arr->A[i];
+    i--;
+  }
+
+  arr->A[i + 1] = x;
+  arr->length++;
+}
+
+int isSorted(struct Array arr) {
+  int i;
+  for (i = 0; i < arr.length - 1; i++) {
+    if (arr.A[i] > arr.A[i + 1]) {
+      return 0;
+    }
+  }
+  return 1;
+}
+
+void Rearrange(struct Array *arr) {
+  int i = 0, j;
+  j = arr->length - 1;
+
+  while (i < j) {
+    while (arr->A[i] < 0) {
+      i++;
+    }
+    while (arr->A[j] >= 0) {
+      j--;
+    }
+
+    if (i < j)
+      swap(&arr->A[i], &arr->A[j]);
+
+    /*if (i < j) {
+      int temp = arr->A[i];
+      arr->A[i] = arr->A[j];
+      arr->A[j] = temp;
+    }*/
+  }
+}
 
 // ============================================================================
-// MAIN DEMO FUNCTION
+// MAIN DEMO FUNCTION :
 // ============================================================================
 void arraysADT_demo() {
   std::cout << "\n=== start Array ADT Demo ===\n";
-  // Show both concepts
-  // demo_fixed_array();
 
-  // demo_dynamic_array();
-
-  // Interactive demo
-  // demo_interactive();
-
-  // Demonstrate -> operator (stack vs heap)
-  demo_pointer_operator();
-
-  insertAppend_demo();
-
-  // Demonstrate Delete operation
-  demo_delete();
-
+  // Create a dynamic array :
   struct Array arr;
   arr.size = 10;
-  arr.length = 5;
+  arr.length = 6;
+
   arr.A = (int *)malloc(arr.size * sizeof(int));
+
   if (arr.A == nullptr) {
     printf("Memory allocation failed for demo array\n");
     return;
   }
 
-  // Initialize with values
-  int demo_vals[] = {10, 20, 30, 40, 50};
+  // Initialize with values :
+  int demo_vals[] = {2, -3, 25, 10, -15, -7};
   for (int i = 0; i < arr.length; i++) {
     arr.A[i] = demo_vals[i];
   }
 
-  printf("%d\n", LinearSearch(arr, 15));
-  display(arr);
+  /*
+    demo_fixed_array();
+    demo_dynamic_array();
+    demo_interactive();
 
-  printf("%d\n", LinearSearch(arr, 10));
-  display(arr);
+    demo_pointer_operator();
+    insertAppend_demo();
+    demo_delete();
 
-  printf("%d\n", LinearSearch(arr.A, 0, arr.length, 5));
-  display(arr); // we got index
+    printf("%d\n", LinearSearch(arr, 15));
+    display(&arr);
 
-  printf("%d\n", Get(arr, 2));
-  Set(&arr, 2, 99);
+    printf("%d\n", LinearSearch(arr, 10));
+    display(&arr);
 
-  printf("%d\n", Max(arr));
-  printf("%d\n", Min(arr));
-  printf("%f\n", Avg(arr));
-  printf("%d\n", Sum(arr));
+    printf("%d\n", LinearSearch(arr.A, 0, arr.length, 5));
+    display(&arr); // we got index
 
+    printf("%d\n", Get(arr, 2));
+    Set(&arr, 2, 99);
 
-  
-  Reverse(&arr);
-  display(arr);
+    printf("%d\n", Max(arr));
+    printf("%d\n", Min(arr));
+    printf("%f\n", Avg(arr));
+    printf("%d\n", Sum(arr));
 
-  Reverse2(&arr);
-  display(arr);
+    Reverse(&arr);
+    Reverse2(&arr);
+
+    InsertSort(&arr, 20);
+    printf("%d\n", isSorted(arr));
+  */
+
+  Rearrange(&arr);
+  display(&arr);
 
   // Clean up
   free(arr.A);
-
   std::cout << "\n=== end Array ADT Demo ===\n";
 }
 
 /*
-// ============================================================================
-// MAIN DEMO FUNCTION
-// ============================================================================
-void arraysADT_demo() {
-  std::cout << "\n=== start Array ADT Demo ===\n";
+  ============================================================================
+  // MAIN DEMO FUNCTION
+  ============================================================================
+  void arraysADT_demo() {
+      std::cout << "\n=== start Array ADT Demo ===\n";
+      struct Array arr = {{10, 20, 30, 40, 50}, 10, 5};
 
-  // Show both concepts
-  // demo_fixed_array();
+      demo_fixed_array();
+      demo_dynamic_array();
+      demo_interactive();
 
-  // demo_dynamic_array();
+      Demonstrate -> operator (stack vs heap)
+      demo_pointer_operator();
+      insertAppend_demo();
+      demo_delete();
 
-  // Interactive demo
-  // demo_interactive();
+      printf("%d\n", LinearSearch(arr, 15));
+      display(&arr);
 
-  // Demonstrate -> operator (stack vs heap)
-  demo_pointer_operator();
-
-  insertAppend_demo();
-
-  // Demonstrate Delete operation
-  demo_delete();
-
-  struct Array arr = {{10, 20, 30, 40, 50}, 10, 5};
-
-  printf("%d\n", LinearSearch(arr, 15));
-  display(arr);
-
-  printf("%d\n", LinearSearch(arr, 10));
-  display(arr);
-
-  std::cout << "\n=== end Array ADT Demo ===\n";
-}
+      printf("%d\n", LinearSearch(arr, 10));
+      display(&arr);
+      std::cout << "\n=== end Array ADT Demo ===\n";
+  }
 */
 
-
 /*
-benraiss@Mbareks-MacBook-Air data-structures-c-cpp % cd /Users/benraiss/Documents/data-structures-c-cpp/Essential/Essential
-benraiss@Mbareks-MacBook-Air Essential % clang++ -std=c++17 -o main main.cpp array_ADT/ArrayADT.cpp
-benraiss@Mbareks-MacBook-Air Essential % ./main  
+  cd /Users/benraiss/Documents/data-structures-c-cpp/Essential/Essential
+  clang++ -std=c++17 -o main main.cpp array_ADT/ArrayADT.cpp
+  ./main
+
+-----------------------------------------------------------------------
+  cd /Users/benraiss/Documents/data-structures-c-cpp/Essential/Essential &&
+  clang++ -std=c++17 -o main main.cpp array_ADT/ArrayADT.cpp && ./main
+
 */
