@@ -397,6 +397,21 @@ int BinarySearch(struct Array arr, int key) {
   return -1;
 }
 
+// Recursive Version (Best Case → O(1))
+int RBinSearch(int A[], int low, int high, int key) {
+  if (low <= high) {
+    int mid = (low + high) / 2;
+
+    if (key == A[mid])
+      return mid;
+    else if (key < A[mid])
+      return RBinSearch(A, low, mid - 1, key);
+    else
+      return RBinSearch(A, mid + 1, high, key);
+  }
+  return -1;
+}
+
 int LinearSearch(int a[], int l, int h, int key) {
   int mid;
   if (l <= h) {
@@ -412,22 +427,94 @@ int LinearSearch(int a[], int l, int h, int key) {
   return -1;
 }
 
+// finding the element with index
 int Get(struct Array arr, int index) {
   if (index >= 0 && index < arr.length) {
     return arr.A[index];
   } else {
     return -1;
   }
-
   return -1;
 }
+
+// set the element
+void Set(struct Array *arr, int index, int x) {
+  if (index >= 0 && index < arr->length) {
+    arr->A[index] = x;
+  }
+}
+
+// finding the max
+int Max(struct Array arr) {
+  int max = arr.A[0];
+  for (int i = 1; i < arr.length; i++) {
+    if (arr.A[i] > max) {
+      max = arr.A[i];
+    }
+  }
+  return max;
+}
+
+// finding the min
+int Min(struct Array arr) {
+  int min = arr.A[0];
+  for (int i = 1; i < arr.length; i++) {
+    if (arr.A[i] < min) {
+      min = arr.A[i];
+    }
+  }
+  return min;
+}
+
+// finding the avg
+float Avg(struct Array arr) {
+  int sum = 0;
+  for (int i = 0; i < arr.length; i++) {
+    sum += arr.A[i];
+  }
+  return (float)sum / arr.length;
+}
+
+// sum the array
+int Sum(struct Array arr) {
+  int sum = 0;
+  for (int i = 0; i < arr.length; i++) {
+    sum += arr.A[i];
+  }
+  return sum;
+}
+
+void Reverse(struct Array *arr) {
+  int *B;
+  int i, j;
+
+  B = (int *)malloc(arr->length * sizeof(int));
+
+  for (i = arr->length - 1, j = 0; i >= 0; j++, i--) {
+    B[j] = arr->A[i];
+  }
+
+  for (i = 0; i < arr->length; i++) {
+    arr->A[i] = B[i];
+  }
+}
+
+void Reverse2(struct Array *arr) {
+  int i, j;
+  for (i = 0, j = arr->length - 1; i < j; i++, j--) {
+    int temp = arr->A[i];
+    arr->A[i] = arr->A[j];
+    arr->A[j] = temp;
+  }
+}
+
+
 
 // ============================================================================
 // MAIN DEMO FUNCTION
 // ============================================================================
 void arraysADT_demo() {
   std::cout << "\n=== start Array ADT Demo ===\n";
-
   // Show both concepts
   // demo_fixed_array();
 
@@ -452,6 +539,8 @@ void arraysADT_demo() {
     printf("Memory allocation failed for demo array\n");
     return;
   }
+
+  // Initialize with values
   int demo_vals[] = {10, 20, 30, 40, 50};
   for (int i = 0; i < arr.length; i++) {
     arr.A[i] = demo_vals[i];
@@ -466,6 +555,23 @@ void arraysADT_demo() {
   printf("%d\n", LinearSearch(arr.A, 0, arr.length, 5));
   display(arr); // we got index
 
+  printf("%d\n", Get(arr, 2));
+  Set(&arr, 2, 99);
+
+  printf("%d\n", Max(arr));
+  printf("%d\n", Min(arr));
+  printf("%f\n", Avg(arr));
+  printf("%d\n", Sum(arr));
+
+
+  
+  Reverse(&arr);
+  display(arr);
+
+  Reverse2(&arr);
+  display(arr);
+
+  // Clean up
   free(arr.A);
 
   std::cout << "\n=== end Array ADT Demo ===\n";
@@ -504,4 +610,11 @@ void arraysADT_demo() {
 
   std::cout << "\n=== end Array ADT Demo ===\n";
 }
+*/
+
+
+/*
+benraiss@Mbareks-MacBook-Air data-structures-c-cpp % cd /Users/benraiss/Documents/data-structures-c-cpp/Essential/Essential
+benraiss@Mbareks-MacBook-Air Essential % clang++ -std=c++17 -o main main.cpp array_ADT/ArrayADT.cpp
+benraiss@Mbareks-MacBook-Air Essential % ./main  
 */
