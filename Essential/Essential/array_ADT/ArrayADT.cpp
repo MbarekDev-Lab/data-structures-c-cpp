@@ -157,7 +157,7 @@ void demo_interactive() {
 // INTERACTIVE DEMO: Dynamic Array with user input
 // ============================================================================
 
-void Delete(struct Array *arr, int index);
+int Delete(struct Array *arr, int index);
 int Get(struct Array arr, int index);
 void Set(struct Array *arr, int index, int x);
 int Max(struct Array arr);
@@ -175,6 +175,29 @@ void Append(struct Array *arr, int x) {
   }
 }
 
+// ============================================================================
+// IMPORTANT: Understanding arr->length vs arr.length
+// ============================================================================
+// arr->length means:
+//   - arr is a POINTER to a struct (struct Array *arr)
+//   - We're accessing the 'length' member through the pointer
+//   - Equivalent to: (*arr).length
+//
+// This does NOT mean the struct is on the heap!
+// The struct can be on STACK or HEAP - it depends on how it was created:
+//
+// STACK example:
+//   struct Array arr;        // Struct on stack
+//   Insert(&arr, 0, 5);      // Pass address (pointer) - struct still on stack!
+//
+// HEAP example:
+//   struct Array *arr = malloc(sizeof(struct Array));  // Struct on heap
+//   Insert(arr, 0, 5);       // Pass pointer - struct is on heap
+//
+// The -> operator just means "access through pointer", not "on heap"
+// ============================================================================
+
+// implenting Insert
 void Insert(struct Array *arr, int index, int x) {
   int i;
   if (index >= 0 && index <= arr->length) {
@@ -186,41 +209,279 @@ void Insert(struct Array *arr, int index, int x) {
   }
 }
 
+// ============================================================================
+// DEMO: Showing -> operator with struct on STACK vs HEAP
+// ============================================================================
+void demo_pointer_operator() {
+  printf("\n=== DEMO: Understanding -> operator ===\n");
+
+  // CASE 1: Struct on STACK, but we use -> when passing pointer
+  printf("\n--- Case 1: Struct on STACK ---\n");
+  struct Array arr_stack; // Struct itself is on STACK
+  arr_stack.size = 10;
+  arr_stack.length = 0;
+  arr_stack.A = (int *)malloc(10 * sizeof(int)); // Only A points to HEAP
+
+  printf("arr_stack is on STACK\n");
+  printf("arr_stack.A points to HEAP\n");
+  printf("Using arr_stack.length (dot operator - direct access)\n");
+
+  // Pass address - now we use -> operator, but struct is still on STACK!
+  Insert(&arr_stack, 0, 100);
+  printf("After Insert(&arr_stack, ...): arr_stack.length = %d\n",
+         arr_stack.length);
+
+  // CASE 2: Struct on HEAP, we use -> operator
+  printf("\n--- Case 2: Struct on HEAP ---\n");
+  struct Array *arr_heap = (struct Array *)malloc(sizeof(struct Array));
+  arr_heap->size = 10; // Must use -> because arr_heap is a pointer
+  arr_heap->length = 0;
+  arr_heap->A = (int *)malloc(10 * sizeof(int));
+
+  printf("arr_heap is a POINTER to struct on HEAP\n");
+  printf("arr_heap->A also points to HEAP\n");
+  printf("Using arr_heap->length (arrow operator - through pointer)\n");
+
+  Insert(arr_heap, 0, 200); // Pass pointer directly
+  printf("After Insert(arr_heap, ...): arr_heap->length = %d\n",
+         arr_heap->length);
+
+  printf("\nKEY POINT: -> operator means 'access through pointer', ");
+  printf("NOT 'struct is on heap'!\n");
+
+  // Cleanup
+  free(arr_stack.A);
+  free(arr_heap->A);
+  free(arr_heap);
+}
+
+// implement InsertAppend :
 void insertAppend_demo() {
   printf("\n=== DEMO: Insert and Append Operations ===\n");
-  
+
   // Create a dynamic array (Insert works with struct Array, not ArrayFix)
+  // NOTE: This struct is on STACK, but we pass its address (pointer)
   struct Array arr;
   arr.size = 10;
   arr.length = 5;
   arr.A = (int *)malloc(arr.size * sizeof(int));
-  
+
   // Initialize with some values
   int initial[] = {1, 2, 3, 4, 5};
   for (int i = 0; i < arr.length; i++) {
     arr.A[i] = initial[i];
   }
-  
+
   printf("Initial array: ");
   display(arr);
-  
+
   // Test Append
   printf("\nAppending 6...\n");
   Append(&arr, 6);
   display(arr);
-  
+
   // Test Insert at index 2
   printf("\nInserting 99 at index 2...\n");
   Insert(&arr, 2, 99);
   display(arr);
-  
+
   // Test Insert at beginning
   printf("\nInserting 0 at index 0...\n");
   Insert(&arr, 0, 0);
   display(arr);
-  
+
   // Clean up
   free(arr.A);
+}
+
+// Demonstrate -> Delete
+// Deletes element at given index and returns the deleted value
+int Delete(struct Array *arr, int index) {
+  int x = 0;
+  int i;
+
+  if (index >= 0 && index < arr->length) {
+    x = arr->A[index]; // Save the value to delete
+
+    // Shift all elements after index to the left
+    for (i = index; i < arr->length - 1; i++) {
+      arr->A[i] = arr->A[i + 1];
+    }
+
+    arr->length--; // Decrement length ONCE after shifting
+    return x;      // Return deleted value
+  }
+  return 0; // Invalid index
+}
+
+// ============================================================================
+// DEMO: Delete operation
+// ============================================================================
+void demo_delete() {
+  printf("\n=== DEMO: Delete Operation ===\n");
+
+  struct Array arr;
+  arr.size = 10;
+  arr.length = 5;
+  arr.A = (int *)malloc(arr.size * sizeof(int));
+
+  // Initialize with values
+  int initial[] = {10, 20, 30, 40, 50};
+  for (int i = 0; i < arr.length; i++) {
+    arr.A[i] = initial[i];
+  }
+
+  printf("Initial array: ");
+  display(arr);
+
+  // Delete element at index 2 (value 30)
+  printf("\nDeleting element at index 2...\n");
+  int deleted = Delete(&arr, 2);
+  printf("Deleted value: %d\n", deleted);
+  printf("Array after deletion: ");
+  display(arr);
+
+  // Delete element at index 0 (first element)
+  printf("\nDeleting element at index 0...\n");
+  deleted = Delete(&arr, 0);
+  printf("Deleted value: %d\n", deleted);
+  printf("Array after deletion: ");
+  display(arr);
+
+  // Try invalid index
+  printf("\nTrying to delete at invalid index 10...\n");
+  deleted = Delete(&arr, 10);
+  printf("Returned value: %d (0 means invalid index)\n", deleted);
+  printf("Array unchanged: ");
+  display(arr);
+
+  free(arr.A);
+}
+
+// ============================================================================
+// LinearSearch FUNCTION
+// ============================================================================
+
+void swap(int *x, int *y) {
+  int temp;
+  *x = *y;
+  *y = temp;
+}
+
+int LinearSearch(struct Array arr, int key) {
+  int i;
+  for (i = 0; i < arr.length; i++) {
+    if (key == arr.A[i]) {
+      swap(&arr.A[i], &arr.A[i - 1]);
+      return i; // Return index if found
+    }
+  }
+  return -1; // Return -1 if not found
+}
+
+int BinarySearch(struct Array arr, int key) {
+  int l, mid, h;
+  l = 0;
+  h = arr.length - 1;
+
+  while (l <= h) {
+    mid = (l + h) / 2;
+    if (key == arr.A[mid]) {
+      return mid;
+    } else if (key < arr.A[mid]) {
+      h = mid - 1;
+    } else {
+      l = mid + 1;
+    }
+  }
+  return -1;
+}
+
+// Recursive Version (Best Case → O(1))
+int RBinSearch(int A[], int low, int high, int key) {
+  if (low <= high) {
+    int mid = (low + high) / 2;
+
+    if (key == A[mid])
+      return mid;
+    else if (key < A[mid])
+      return RBinSearch(A, low, mid - 1, key);
+    else
+      return RBinSearch(A, mid + 1, high, key);
+  }
+  return -1;
+}
+
+int LinearSearch(int a[], int l, int h, int key) {
+  int mid;
+  if (l <= h) {
+    mid = (l + h) / 2;
+    if (key == a[mid]) {
+      return mid;
+    } else if (key < a[mid]) {
+      return LinearSearch(a, l, mid - 1, key);
+    } else {
+      return LinearSearch(a, mid + 1, h, key);
+    }
+  }
+  return -1;
+}
+
+// finding the element with index
+int Get(struct Array arr, int index) {
+  if (index >= 0 && index < arr.length) {
+    return arr.A[index];
+  } else {
+    return -1;
+  }
+  return -1;
+}
+
+// set the element
+void Set(struct Array *arr, int index, int x) {
+  if (index >= 0 && index < arr->length) {
+    arr->A[index] = x;
+  }
+}
+
+// finding the max
+int Max(struct Array arr) {
+  int max = arr.A[0];
+  for (int i = 1; i < arr.length; i++) {
+    if (arr.A[i] > max) {
+      max = arr.A[i];
+    }
+  }
+  return max;
+}
+
+// finding the min
+int Min(struct Array arr) {
+  int min = arr.A[0];
+  for (int i = 1; i < arr.length; i++) {
+    if (arr.A[i] < min) {
+      min = arr.A[i];
+    }
+  }
+  return min;
+}
+
+// finding the avg
+float Avg(struct Array arr) {
+  int sum = 0;
+  for (int i = 0; i < arr.length; i++) {
+    sum += arr.A[i];
+  }
+  return (float)sum / arr.length;
+}
+
+// sum the array
+int Sum(struct Array arr) {
+  int sum = 0;
+  for (int i = 0; i < arr.length; i++) {
+    sum += arr.A[i];
+  }
+  return sum;
 }
 
 // ============================================================================
@@ -237,5 +498,82 @@ void arraysADT_demo() {
   // Interactive demo
   // demo_interactive();
 
+  // Demonstrate -> operator (stack vs heap)
+  demo_pointer_operator();
+
   insertAppend_demo();
+
+  // Demonstrate Delete operation
+  demo_delete();
+
+  struct Array arr;
+  arr.size = 10;
+  arr.length = 5;
+  arr.A = (int *)malloc(arr.size * sizeof(int));
+  if (arr.A == nullptr) {
+    printf("Memory allocation failed for demo array\n");
+    return;
+  }
+  int demo_vals[] = {10, 20, 30, 40, 50};
+  for (int i = 0; i < arr.length; i++) {
+    arr.A[i] = demo_vals[i];
+  }
+
+  printf("%d\n", LinearSearch(arr, 15));
+  display(arr);
+
+  printf("%d\n", LinearSearch(arr, 10));
+  display(arr);
+
+  printf("%d\n", LinearSearch(arr.A, 0, arr.length, 5));
+  display(arr); // we got index
+
+  printf("%d\n", Get(arr, 2));
+  Set(&arr, 2, 99);
+  display(arr);
+
+  printf("%d\n", Max(arr));
+  printf("%d\n", Min(arr));
+  printf("%f\n", Avg(arr));
+  printf("%d\n", Sum(arr));
+
+  // Clean up
+  free(arr.A);
+
+  std::cout << "\n=== end Array ADT Demo ===\n";
 }
+
+/*
+// ============================================================================
+// MAIN DEMO FUNCTION
+// ============================================================================
+void arraysADT_demo() {
+  std::cout << "\n=== start Array ADT Demo ===\n";
+
+  // Show both concepts
+  // demo_fixed_array();
+
+  // demo_dynamic_array();
+
+  // Interactive demo
+  // demo_interactive();
+
+  // Demonstrate -> operator (stack vs heap)
+  demo_pointer_operator();
+
+  insertAppend_demo();
+
+  // Demonstrate Delete operation
+  demo_delete();
+
+  struct Array arr = {{10, 20, 30, 40, 50}, 10, 5};
+
+  printf("%d\n", LinearSearch(arr, 15));
+  display(arr);
+
+  printf("%d\n", LinearSearch(arr, 10));
+  display(arr);
+
+  std::cout << "\n=== end Array ADT Demo ===\n";
+}
+*/
