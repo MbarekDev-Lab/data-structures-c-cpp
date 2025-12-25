@@ -13,16 +13,16 @@ extern "C" {
 #include <cstdlib>
 #include <iostream>
 
+// run :  ./build_and_run.sh
 int main(int argc, const char *argv[]) {
   std::cout << "Start Program!" << '\n';
 
   // arraysADT demo array
-   arraysADT_demo();
+  // arraysADT_demo();
 
   // arraysMenue demo arrays
-  //arraysMenu();
+  arraysMenu();
 
   std::cout << "End Program!" << '\n';
   return EXIT_SUCCESS;
 }
- 
