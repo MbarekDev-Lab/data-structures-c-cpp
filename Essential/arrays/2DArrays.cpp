@@ -9,7 +9,8 @@
 #include <cstdio>
 #include <cstdlib>
 
-void two_dimensional_array() {
+void two_dimensional_array()
+{
   // Declare a 2D array
   int A[3][4] = {
       {1, 2, 3, 4},
@@ -49,8 +50,10 @@ void two_dimensional_array() {
   C[2] = (int *)malloc(4 * sizeof(int));
 
   int i, j;
-  for (i = 0; i < 3; i++) {
-    for (j = 0; j < 4; j++) {
+  for (i = 0; i < 3; i++)
+  {
+    for (j = 0; j < 4; j++)
+    {
       printf("%d ", C[i][j]);
     }
     printf("\n");

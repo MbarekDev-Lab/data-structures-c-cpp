@@ -12,7 +12,8 @@
 // - Size can be determined at runtime
 // - CANNOT be initialized with {1,2,3} syntax
 // ============================================================================
-struct Array {
+struct Array
+{
   int *A;     // Pointer to dynamically allocated memory
   int size;   // Maximum capacity
   int length; // Current number of elements
@@ -27,26 +28,31 @@ struct Array {
 // - Cannot be resized (no realloc)
 // - Memory is on the stack
 // ============================================================================
-struct ArrayFix {
+struct ArrayFix
+{
   int A[5];   // Fixed-size array (5 elements max)
   int size;   // Maximum capacity (should be 5 or less)
   int length; // Current number of elements
 };
 
 // Display function for dynamic array
-void display(struct Array *arr) {
+void display(struct Array *arr)
+{
   printf("\n[Dynamic Array] Elements are: ");
 
-  for (int i = 0; i < arr->length; i++) {
+  for (int i = 0; i < arr->length; i++)
+  {
     printf("%d ", arr->A[i]);
   }
   printf("\n");
 }
 
 // Display function for fixed array
-void display(struct ArrayFix arr) {
+void display(struct ArrayFix arr)
+{
   printf("\n[Fixed Array] Elements are: ");
-  for (int i = 0; i < arr.length; i++) {
+  for (int i = 0; i < arr.length; i++)
+  {
     printf("%d ", arr.A[i]);
   }
   printf("\n");
@@ -55,7 +61,8 @@ void display(struct ArrayFix arr) {
 // ============================================================================
 // DEMONSTRATION: Fixed-Size Array
 // ============================================================================
-void demo_fixed_array() {
+void demo_fixed_array()
+{
   printf("\n=== DEMO: Fixed-Size Array ===\n");
 
   // Fixed-size arrays CAN be initialized with {1,2,3} syntax
@@ -75,7 +82,8 @@ void demo_fixed_array() {
 // ============================================================================
 // DEMONSTRATION: Dynamic Array (Pointer-based)
 // ============================================================================
-void demo_dynamic_array() {
+void demo_dynamic_array()
+{
   printf("\n=== DEMO: Dynamic Array (Pointer-based) ===\n");
   struct Array arr;
 
@@ -84,7 +92,8 @@ void demo_dynamic_array() {
   arr.length = 0;
   arr.A = (int *)malloc(arr.size * sizeof(int));
 
-  if (arr.A == nullptr) {
+  if (arr.A == nullptr)
+  {
     printf("Memory allocation failed!\n");
     return;
   }
@@ -92,7 +101,8 @@ void demo_dynamic_array() {
   // Now we can assign values
   int initial_values[] = {2, 3, 4, 5, 6};
   arr.length = 5;
-  for (int i = 0; i < arr.length; i++) {
+  for (int i = 0; i < arr.length; i++)
+  {
     arr.A[i] = initial_values[i];
   }
 
@@ -114,7 +124,8 @@ void demo_dynamic_array() {
 // ============================================================================
 // INTERACTIVE DEMO: Dynamic Array with user input
 // ============================================================================
-void demo_interactive() {
+void demo_interactive()
+{
   printf("\n=== INTERACTIVE DEMO: Dynamic Array ===\n");
 
   struct Array arr;
@@ -125,7 +136,8 @@ void demo_interactive() {
 
   // Allocate memory
   arr.A = (int *)malloc(arr.size * sizeof(int));
-  if (arr.A == nullptr) {
+  if (arr.A == nullptr)
+  {
     printf("Memory allocation failed!\n");
     return;
   }
@@ -135,14 +147,16 @@ void demo_interactive() {
   printf("Enter number of elements: ");
   scanf("%d", &n);
 
-  if (n > arr.size) {
+  if (n > arr.size)
+  {
     printf("Warning: n (%d) > size (%d). Resizing...\n", n, arr.size);
     arr.size = n;
     arr.A = (int *)realloc(arr.A, arr.size * sizeof(int));
   }
 
   printf("Enter all %d elements (space-separated): ", n);
-  for (i = 0; i < n; i++) {
+  for (i = 0; i < n; i++)
+  {
     scanf("%d", &arr.A[i]);
   }
 
@@ -167,11 +181,15 @@ float Avg(struct Array arr);
 void Reverse(struct Array *arr);
 void Reverse2(struct Array *arr);
 
-void Append(struct Array *arr, int x) {
-  if (arr->length < arr->size) {
+void Append(struct Array *arr, int x)
+{
+  if (arr->length < arr->size)
+  {
     arr->A[arr->length] = x;
     arr->length++;
-  } else {
+  }
+  else
+  {
     printf("Error: Array is full\n");
   }
 }
@@ -199,10 +217,13 @@ void Append(struct Array *arr, int x) {
 // ============================================================================
 
 // implenting Insert
-void Insert(struct Array *arr, int index, int x) {
+void Insert(struct Array *arr, int index, int x)
+{
   int i;
-  if (index >= 0 && index <= arr->length) {
-    for (i = arr->length; i > index; i--) {
+  if (index >= 0 && index <= arr->length)
+  {
+    for (i = arr->length; i > index; i--)
+    {
       arr->A[i] = arr->A[i - 1];
     }
     arr->A[index] = x;
@@ -213,7 +234,8 @@ void Insert(struct Array *arr, int index, int x) {
 // ============================================================================
 // DEMO: Showing -> operator with struct on STACK vs HEAP
 // ============================================================================
-void demo_pointer_operator() {
+void demo_pointer_operator()
+{
   printf("\n=== DEMO: Understanding -> operator ===\n");
 
   // CASE 1: Struct on STACK, but we use -> when passing pointer
@@ -257,7 +279,8 @@ void demo_pointer_operator() {
 }
 
 // implement InsertAppend :
-void insertAppend_demo() {
+void insertAppend_demo()
+{
   printf("\n=== DEMO: Insert and Append Operations ===\n");
 
   // Create a dynamic array (Insert works with struct Array, not ArrayFix)
@@ -269,7 +292,8 @@ void insertAppend_demo() {
 
   // Initialize with some values
   int initial[] = {1, 2, 3, 4, 5};
-  for (int i = 0; i < arr.length; i++) {
+  for (int i = 0; i < arr.length; i++)
+  {
     arr.A[i] = initial[i];
   }
 
@@ -297,15 +321,18 @@ void insertAppend_demo() {
 
 // Demonstrate -> Delete
 // Deletes element at given index and returns the deleted value
-int Delete(struct Array *arr, int index) {
+int Delete(struct Array *arr, int index)
+{
   int x = 0;
   int i;
 
-  if (index >= 0 && index < arr->length) {
+  if (index >= 0 && index < arr->length)
+  {
     x = arr->A[index]; // Save the value to delete
 
     // Shift all elements after index to the left
-    for (i = index; i < arr->length - 1; i++) {
+    for (i = index; i < arr->length - 1; i++)
+    {
       arr->A[i] = arr->A[i + 1];
     }
 
@@ -318,7 +345,8 @@ int Delete(struct Array *arr, int index) {
 // ============================================================================
 // DEMO: Delete operation
 // ============================================================================
-void demo_delete() {
+void demo_delete()
+{
   printf("\n=== DEMO: Delete Operation ===\n");
 
   struct Array arr;
@@ -328,7 +356,8 @@ void demo_delete() {
 
   // Initialize with values
   int initial[] = {10, 20, 30, 40, 50};
-  for (int i = 0; i < arr.length; i++) {
+  for (int i = 0; i < arr.length; i++)
+  {
     arr.A[i] = initial[i];
   }
 
@@ -363,16 +392,20 @@ void demo_delete() {
 // LinearSearch FUNCTION
 // ============================================================================
 
-void swap(int *x, int *y) {
+void swap(int *x, int *y)
+{
   int temp;
   *x = *y;
   *y = temp;
 }
 
-int LinearSearch(struct Array arr, int key) {
+int LinearSearch(struct Array arr, int key)
+{
   int i;
-  for (i = 0; i < arr.length; i++) {
-    if (key == arr.A[i]) {
+  for (i = 0; i < arr.length; i++)
+  {
+    if (key == arr.A[i])
+    {
       swap(&arr.A[i], &arr.A[i - 1]);
       return i; // Return index if found
     }
@@ -380,18 +413,25 @@ int LinearSearch(struct Array arr, int key) {
   return -1; // Return -1 if not found
 }
 
-int BinarySearch(struct Array arr, int key) {
+int BinarySearch(struct Array arr, int key)
+{
   int l, mid, h;
   l = 0;
   h = arr.length - 1;
 
-  while (l <= h) {
+  while (l <= h)
+  {
     mid = (l + h) / 2;
-    if (key == arr.A[mid]) {
+    if (key == arr.A[mid])
+    {
       return mid;
-    } else if (key < arr.A[mid]) {
+    }
+    else if (key < arr.A[mid])
+    {
       h = mid - 1;
-    } else {
+    }
+    else
+    {
       l = mid + 1;
     }
   }
@@ -399,8 +439,10 @@ int BinarySearch(struct Array arr, int key) {
 }
 
 // Recursive Version (Best Case → O(1))
-int RBinSearch(int A[], int low, int high, int key) {
-  if (low <= high) {
+int RBinSearch(int A[], int low, int high, int key)
+{
+  if (low <= high)
+  {
     int mid = (low + high) / 2;
 
     if (key == A[mid])
@@ -413,15 +455,22 @@ int RBinSearch(int A[], int low, int high, int key) {
   return -1;
 }
 
-int LinearSearch(int a[], int l, int h, int key) {
+int LinearSearch(int a[], int l, int h, int key)
+{
   int mid;
-  if (l <= h) {
+  if (l <= h)
+  {
     mid = (l + h) / 2;
-    if (key == a[mid]) {
+    if (key == a[mid])
+    {
       return mid;
-    } else if (key < a[mid]) {
+    }
+    else if (key < a[mid])
+    {
       return LinearSearch(a, l, mid - 1, key);
-    } else {
+    }
+    else
+    {
       return LinearSearch(a, mid + 1, h, key);
     }
   }
@@ -429,27 +478,36 @@ int LinearSearch(int a[], int l, int h, int key) {
 }
 
 // finding the element with index
-int Get(struct Array arr, int index) {
-  if (index >= 0 && index < arr.length) {
+int Get(struct Array arr, int index)
+{
+  if (index >= 0 && index < arr.length)
+  {
     return arr.A[index];
-  } else {
+  }
+  else
+  {
     return -1;
   }
   return -1;
 }
 
 // set the element
-void Set(struct Array *arr, int index, int x) {
-  if (index >= 0 && index < arr->length) {
+void Set(struct Array *arr, int index, int x)
+{
+  if (index >= 0 && index < arr->length)
+  {
     arr->A[index] = x;
   }
 }
 
 // finding the max
-int Max(struct Array arr) {
+int Max(struct Array arr)
+{
   int max = arr.A[0];
-  for (int i = 1; i < arr.length; i++) {
-    if (arr.A[i] > max) {
+  for (int i = 1; i < arr.length; i++)
+  {
+    if (arr.A[i] > max)
+    {
       max = arr.A[i];
     }
   }
@@ -457,10 +515,13 @@ int Max(struct Array arr) {
 }
 
 // finding the min
-int Min(struct Array arr) {
+int Min(struct Array arr)
+{
   int min = arr.A[0];
-  for (int i = 1; i < arr.length; i++) {
-    if (arr.A[i] < min) {
+  for (int i = 1; i < arr.length; i++)
+  {
+    if (arr.A[i] < min)
+    {
       min = arr.A[i];
     }
   }
@@ -468,55 +529,67 @@ int Min(struct Array arr) {
 }
 
 // finding the avg
-float Avg(struct Array arr) {
+float Avg(struct Array arr)
+{
   int sum = 0;
-  for (int i = 0; i < arr.length; i++) {
+  for (int i = 0; i < arr.length; i++)
+  {
     sum += arr.A[i];
   }
   return (float)sum / arr.length;
 }
 
 // sum the array
-int Sum(struct Array arr) {
+int Sum(struct Array arr)
+{
   int sum = 0;
-  for (int i = 0; i < arr.length; i++) {
+  for (int i = 0; i < arr.length; i++)
+  {
     sum += arr.A[i];
   }
   return sum;
 }
 
-void Reverse(struct Array *arr) {
+void Reverse(struct Array *arr)
+{
   int *B;
   int i, j;
 
   B = (int *)malloc(arr->length * sizeof(int));
 
-  for (i = arr->length - 1, j = 0; i >= 0; j++, i--) {
+  for (i = arr->length - 1, j = 0; i >= 0; j++, i--)
+  {
     B[j] = arr->A[i];
   }
 
-  for (i = 0; i < arr->length; i++) {
+  for (i = 0; i < arr->length; i++)
+  {
     arr->A[i] = B[i];
   }
 }
 
-void Reverse2(struct Array *arr) {
+void Reverse2(struct Array *arr)
+{
   int i, j;
-  for (i = 0, j = arr->length - 1; i < j; i++, j--) {
+  for (i = 0, j = arr->length - 1; i < j; i++, j--)
+  {
     int temp = arr->A[i];
     arr->A[i] = arr->A[j];
     arr->A[j] = temp;
   }
 }
 
-void InsertSort(struct Array *arr, int x) {
+void InsertSort(struct Array *arr, int x)
+{
   int i = arr->length - 1;
 
-  if (arr->length == arr->size) {
+  if (arr->length == arr->size)
+  {
     return;
   }
 
-  while (i >= 0 && arr->A[i] > x) {
+  while (i >= 0 && arr->A[i] > x)
+  {
     arr->A[i + 1] = arr->A[i];
     i--;
   }
@@ -525,25 +598,32 @@ void InsertSort(struct Array *arr, int x) {
   arr->length++;
 }
 
-int isSorted(struct Array arr) {
+int isSorted(struct Array arr)
+{
   int i;
-  for (i = 0; i < arr.length - 1; i++) {
-    if (arr.A[i] > arr.A[i + 1]) {
+  for (i = 0; i < arr.length - 1; i++)
+  {
+    if (arr.A[i] > arr.A[i + 1])
+    {
       return 0;
     }
   }
   return 1;
 }
 
-void Rearrange(struct Array *arr) {
+void Rearrange(struct Array *arr)
+{
   int i = 0, j;
   j = arr->length - 1;
 
-  while (i < j) {
-    while (arr->A[i] < 0) {
+  while (i < j)
+  {
+    while (arr->A[i] < 0)
+    {
       i++;
     }
-    while (arr->A[j] >= 0) {
+    while (arr->A[j] >= 0)
+    {
       j--;
     }
 
@@ -558,7 +638,8 @@ void Rearrange(struct Array *arr) {
   }
 }
 
-struct Array *Merge(struct Array *arr1, struct Array *arr2) {
+struct Array *Merge(struct Array *arr1, struct Array *arr2)
+{
   int i, j, k;
   i = j = k = 0;
 
@@ -566,24 +647,31 @@ struct Array *Merge(struct Array *arr1, struct Array *arr2) {
   arr3->size = arr1->length + arr2->length;
   arr3->A = (int *)malloc(arr3->size * sizeof(int));
 
-  if (arr3->A == nullptr) {
+  if (arr3->A == nullptr)
+  {
     free(arr3);
     return nullptr;
   }
 
-  while (i < arr1->length && j < arr2->length) {
-    if (arr1->A[i] < arr2->A[j]) {
+  while (i < arr1->length && j < arr2->length)
+  {
+    if (arr1->A[i] < arr2->A[j])
+    {
       arr3->A[k++] = arr1->A[i++];
-    } else {
+    }
+    else
+    {
       arr3->A[k++] = arr2->A[j++];
     }
   }
 
-  for (; i < arr1->length; i++) {
+  for (; i < arr1->length; i++)
+  {
     arr3->A[k++] = arr1->A[i];
   }
 
-  for (; j < arr2->length; j++) {
+  for (; j < arr2->length; j++)
+  {
     arr3->A[k++] = arr2->A[j];
   }
 
@@ -594,7 +682,8 @@ struct Array *Merge(struct Array *arr1, struct Array *arr2) {
 // ============================================================================
 // MAIN DEMO FUNCTION :
 // ============================================================================
-void arraysADT_demo() {
+void arraysADT_demo()
+{
   std::cout << "\n=== start Array ADT Demo ===\n";
 
   // Create a dynamic array :
@@ -604,14 +693,16 @@ void arraysADT_demo() {
 
   arr.A = (int *)malloc(arr.size * sizeof(int));
 
-  if (arr.A == nullptr) {
+  if (arr.A == nullptr)
+  {
     printf("Memory allocation failed for demo array\n");
     return;
   }
 
   // Initialize with values :
   int demo_vals[] = {2, -3, 25, 10, -15, -7};
-  for (int i = 0; i < arr.length; i++) {
+  for (int i = 0; i < arr.length; i++)
+  {
     arr.A[i] = demo_vals[i];
   }
 
@@ -621,7 +712,8 @@ void arraysADT_demo() {
   arr1.length = 5;
   arr1.A = (int *)malloc(arr1.size * sizeof(int));
   int vals1[] = {2, 6, 10, 15, 25};
-  for (int i = 0; i < arr1.length; i++) {
+  for (int i = 0; i < arr1.length; i++)
+  {
     arr1.A[i] = vals1[i];
   }
 
@@ -631,12 +723,14 @@ void arraysADT_demo() {
   arr2.length = 5;
   arr2.A = (int *)malloc(arr2.size * sizeof(int));
   int vals2[] = {3, 4, 7, 18, 20};
-  for (int i = 0; i < arr2.length; i++) {
+  for (int i = 0; i < arr2.length; i++)
+  {
     arr2.A[i] = vals2[i];
   }
 
   struct Array *arr3 = Merge(&arr1, &arr2);
-  if (arr3 != nullptr) {
+  if (arr3 != nullptr)
+  {
     display(arr3);
     free(arr3->A);
     free(arr3);

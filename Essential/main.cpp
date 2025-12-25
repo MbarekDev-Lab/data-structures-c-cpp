@@ -9,7 +9,8 @@
 #include <cstdlib>
 #include <iostream>
 
-int main(int argc, const char *argv[]) {
+int main(int argc, const char *argv[])
+{
   std::cout << "Start Program!" << '\n';
 
   // arraysADT demo array

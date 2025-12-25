@@ -12,4 +12,3 @@ int f(int n);
 void foo(int n, int &sum);
 
 #endif /* Quiz_hpp */
-

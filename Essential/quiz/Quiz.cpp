@@ -1,7 +1,8 @@
 #include "Quiz.hpp"
 #include <cstdio>
 
-int f(int n) {
+int f(int n)
+{
   static int i = 1;
   if (n >= 5)
     return n;
@@ -11,7 +12,8 @@ int f(int n) {
   return f(n);
 }
 
-void foo(int n, int &sum) {
+void foo(int n, int &sum)
+{
   int k = 0, j = 0;
 
   if (n == 0)
