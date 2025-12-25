@@ -558,6 +558,39 @@ void Rearrange(struct Array *arr) {
   }
 }
 
+struct Array *Merge(struct Array *arr1, struct Array *arr2) {
+  int i, j, k;
+  i = j = k = 0;
+
+  struct Array *arr3 = (struct Array *)malloc(sizeof(struct Array));
+  arr3->size = arr1->length + arr2->length;
+  arr3->A = (int *)malloc(arr3->size * sizeof(int));
+
+  if (arr3->A == nullptr) {
+    free(arr3);
+    return nullptr;
+  }
+
+  while (i < arr1->length && j < arr2->length) {
+    if (arr1->A[i] < arr2->A[j]) {
+      arr3->A[k++] = arr1->A[i++];
+    } else {
+      arr3->A[k++] = arr2->A[j++];
+    }
+  }
+
+  for (; i < arr1->length; i++) {
+    arr3->A[k++] = arr1->A[i];
+  }
+
+  for (; j < arr2->length; j++) {
+    arr3->A[k++] = arr2->A[j];
+  }
+
+  arr3->length = arr1->length + arr2->length;
+  return arr3;
+}
+
 // ============================================================================
 // MAIN DEMO FUNCTION :
 // ============================================================================
@@ -581,6 +614,38 @@ void arraysADT_demo() {
   for (int i = 0; i < arr.length; i++) {
     arr.A[i] = demo_vals[i];
   }
+
+  // Initialize arr1
+  struct Array arr1;
+  arr1.size = 10;
+  arr1.length = 5;
+  arr1.A = (int *)malloc(arr1.size * sizeof(int));
+  int vals1[] = {2, 6, 10, 15, 25};
+  for (int i = 0; i < arr1.length; i++) {
+    arr1.A[i] = vals1[i];
+  }
+
+  // Initialize arr2
+  struct Array arr2;
+  arr2.size = 10;
+  arr2.length = 5;
+  arr2.A = (int *)malloc(arr2.size * sizeof(int));
+  int vals2[] = {3, 4, 7, 18, 20};
+  for (int i = 0; i < arr2.length; i++) {
+    arr2.A[i] = vals2[i];
+  }
+
+  struct Array *arr3 = Merge(&arr1, &arr2);
+  if (arr3 != nullptr) {
+    display(arr3);
+    free(arr3->A);
+    free(arr3);
+  }
+
+  // Clean up
+  free(arr1.A);
+  free(arr2.A);
+  free(arr.A);
 
   /*
     demo_fixed_array();
@@ -613,13 +678,10 @@ void arraysADT_demo() {
 
     InsertSort(&arr, 20);
     printf("%d\n", isSorted(arr));
+    Rearrange(&arr);
+    display(&arr);
   */
 
-  Rearrange(&arr);
-  display(&arr);
-
-  // Clean up
-  free(arr.A);
   std::cout << "\n=== end Array ADT Demo ===\n";
 }
 
