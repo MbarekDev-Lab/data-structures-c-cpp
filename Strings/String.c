@@ -233,6 +233,22 @@ void remove_duplicates(char *str)
 // ADVANCED CASE CONVERSION METHODS
 // ============================================================================
 
+// Method to count words directly
+void count_and_print_words_directly()
+{
+
+    char A[] = "abcd efg hijklmnop qrstuvw     xyz";
+
+    int wCount = 1;
+
+    for (int i = 0; A[i] != '\0'; i++)
+    {
+        if (A[i] == ' ' && A[i - 1] != ' ')
+            wCount++;
+    }
+    printf("Words: %d\n", wCount);
+}
+
 // Method 1: Using ASCII arithmetic (most efficient)
 void to_uppercase_ascii(char *str)
 {
@@ -299,6 +315,7 @@ void to_lowercase_ascii(char *str)
     }
 }
 
+// Method 4: Using bitwise operation (fastest)
 void to_lowercase_bitwise(char *str)
 {
     // Set the 6th bit (0x20) to convert uppercase to lowercase
@@ -309,152 +326,6 @@ void to_lowercase_bitwise(char *str)
             str[i] |= 0x20; // Set bit 5 (0-indexed)
         }
     }
-}
-
-// Demonstration of all methods
-void demo_case_conversion_methods()
-{
-    printf("\n=== Case Conversion Methods Demonstration ===\n");
-
-    // Method 1: ASCII arithmetic
-    char str1[] = "hello world 123";
-    printf("\nMethod 1 - ASCII Arithmetic:\n");
-    printf("Before: %s\n", str1);
-    to_uppercase_ascii(str1);
-    printf("After:  %s\n", str1);
-
-    // Method 2: Lookup table
-    char str2[] = "data structures in c";
-    printf("\nMethod 2 - Lookup Table:\n");
-    printf("Before: %s\n", str2);
-    to_uppercase_lookup(str2);
-    printf("After:  %s\n", str2);
-
-    // Method 3: ctype.h
-    char str3[] = "programming in c";
-    printf("\nMethod 3 - ctype.h (toupper):\n");
-    printf("Before: %s\n", str3);
-    to_uppercase_ctype(str3);
-    printf("After:  %s\n", str3);
-
-    // Method 4: Bitwise operation
-    char str4[] = "efficient algorithm";
-    printf("\nMethod 4 - Bitwise Operation:\n");
-    printf("Before: %s\n", str4);
-    to_uppercase_bitwise(str4);
-    printf("After:  %s\n", str4);
-
-    // Demonstrate lowercase conversion
-    char str5[] = "CONVERT TO LOWERCASE";
-    printf("\nLowercase Conversion (ASCII):\n");
-    printf("Before: %s\n", str5);
-    to_lowercase_ascii(str5);
-    printf("After:  %s\n", str5);
-
-    char str6[] = "BITWISE LOWERCASE";
-    printf("\nLowercase Conversion (Bitwise):\n");
-    printf("Before: %s\n", str6);
-    to_lowercase_bitwise(str6);
-    printf("After:  %s\n", str6);
-
-    // Performance comparison explanation
-    printf("\n=== Performance Notes ===\n");
-    printf("1. ASCII Arithmetic:   Fast, simple, readable\n");
-    printf("2. Lookup Table:       O(n*26) time, educational value\n");
-    printf("3. ctype.h:           Most portable, locale-aware\n");
-    printf("4. Bitwise:           Fastest, ~2x faster than arithmetic\n");
-}
-
-// ============================================================================
-// DEMONSTRATION FUNCTIONS
-// ============================================================================
-
-void demo_basic_operations()
-{
-    printf("\n=== Basic String Operations ===\n");
-
-    char str1[] = "Hello, World!";
-    printf("Original string: %s\n", str1);
-    printf("Length: %d\n", str_length(str1));
-
-    char str2[50];
-    str_copy(str2, "C Programming");
-    printf("Copied string: %s\n", str2);
-
-    char str3[100] = "Hello";
-    str_concat(str3, " World");
-    printf("Concatenated: %s\n", str3);
-}
-
-void demo_case_operations()
-{
-    printf("\n=== Case Operations ===\n");
-
-    char str[] = "Data Structures in C";
-    printf("Original: %s\n", str);
-
-    char upper[50];
-    str_copy(upper, str);
-    str_to_upper(upper);
-    printf("Uppercase: %s\n", upper);
-
-    char lower[50];
-    str_copy(lower, str);
-    str_to_lower(lower);
-    printf("Lowercase: %s\n", lower);
-
-    char toggle[50];
-    str_copy(toggle, str);
-    str_toggle_case(toggle);
-    printf("Toggle case: %s\n", toggle);
-}
-
-void demo_string_analysis()
-{
-    printf("\n=== String Analysis ===\n");
-
-    char str[] = "Data Structures in C";
-    printf("String: %s\n", str);
-    printf("Vowels: %d\n", count_vowels(str));
-    printf("Consonants: %d\n", count_consonants(str));
-    printf("Words: %d\n", count_words(str));
-
-    char pal1[] = "madam";
-    char pal2[] = "hello";
-    printf("\n'%s' is palindrome: %s\n", pal1, is_palindrome(pal1) ? "Yes" : "No");
-    printf("'%s' is palindrome: %s\n", pal2, is_palindrome(pal2) ? "Yes" : "No");
-}
-
-void demo_advanced_operations()
-{
-    printf("\n=== Advanced Operations ===\n");
-
-    char str[] = "hello";
-    printf("Original: %s\n", str);
-    str_reverse(str);
-    printf("Reversed: %s\n", str);
-
-    printf("\nAnagram check:\n");
-    printf("'listen' and 'silent': %s\n", are_anagrams("listen", "silent") ? "Anagrams" : "Not anagrams");
-    printf("'hello' and 'world': %s\n", are_anagrams("hello", "world") ? "Anagrams" : "Not anagrams");
-
-    char dup[] = "programming";
-    printf("\nOriginal: %s\n", dup);
-    remove_duplicates(dup);
-    printf("After removing duplicates: %s\n", dup);
-}
-
-void demo_comparison()
-{
-    printf("\n=== String Comparison ===\n");
-
-    int cmp1 = str_compare("apple", "banana");
-    int cmp2 = str_compare("hello", "hello");
-    int cmp3 = str_compare("zebra", "apple");
-
-    printf("'apple' vs 'banana': %d (negative means first is less)\n", cmp1);
-    printf("'hello' vs 'hello': %d (zero means equal)\n", cmp2);
-    printf("'zebra' vs 'apple': %d (positive means first is greater)\n", cmp3);
 }
 
 // changing case of characters
@@ -493,154 +364,6 @@ char *to_uppercase(char *str)
         }
     }
     return str;
-}
-
-// ============================================================================
-// TOGGLE CASE METHODS (Multiple Implementations)
-// ============================================================================
-
-// Method 1: Toggle using ASCII arithmetic
-void toggle_case_ascii(char *str)
-{
-    // A = 65, a = 97, difference = 32
-    for (int i = 0; str[i] != '\0'; i++)
-    {
-        if (str[i] >= 65 && str[i] <= 90)
-        {
-            // Uppercase → Lowercase
-            str[i] += 32;
-        }
-        else if (str[i] >= 97 && str[i] <= 122)
-        {
-            // Lowercase → Uppercase
-            str[i] -= 32;
-        }
-    }
-}
-
-// Method 2: Toggle using lookup tables
-void toggle_case_lookup(char *str)
-{
-    char upper[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    char lower[] = "abcdefghijklmnopqrstuvwxyz";
-
-    for (int i = 0; str[i] != '\0'; i++)
-    {
-        // Check if uppercase, convert to lowercase
-        for (int j = 0; j < 26; j++)
-        {
-            if (str[i] == upper[j])
-            {
-                str[i] = lower[j];
-                break;
-            }
-            else if (str[i] == lower[j])
-            {
-                str[i] = upper[j];
-                break;
-            }
-        }
-    }
-}
-
-// Method 3: Toggle using ctype.h
-void toggle_case_ctype(char *str)
-{
-    for (int i = 0; str[i] != '\0'; i++)
-    {
-        if (isupper((unsigned char)str[i]))
-        {
-            str[i] = tolower((unsigned char)str[i]);
-        }
-        else if (islower((unsigned char)str[i]))
-        {
-            str[i] = toupper((unsigned char)str[i]);
-        }
-    }
-}
-
-// Method 4: Toggle using bitwise XOR (fastest)
-void toggle_case_bitwise(char *str)
-{
-    // XOR with 0x20 (32) toggles bit 5, which flips case
-    for (int i = 0; str[i] != '\0'; i++)
-    {
-        if ((str[i] >= 'A' && str[i] <= 'Z') ||
-            (str[i] >= 'a' && str[i] <= 'z'))
-        {
-            str[i] ^= 0x20; // Toggle bit 5
-        }
-    }
-}
-
-// Method 5: Toggle using conditional operator (compact)
-void toggle_case_ternary(char *str)
-{
-    for (int i = 0; str[i] != '\0'; i++)
-    {
-        str[i] = (str[i] >= 'A' && str[i] <= 'Z') ? str[i] + 32 : (str[i] >= 'a' && str[i] <= 'z') ? str[i] - 32
-                                                                                                   : str[i];
-    }
-}
-
-// Demonstration of toggle case methods
-void demo_toggle_case_methods()
-{
-    printf("\n=== Toggle Case Methods Demonstration ===\n");
-
-    // Method 1: ASCII arithmetic
-    char str1[] = "Hello World 123";
-    printf("\nMethod 1 - ASCII Arithmetic:\n");
-    printf("Before: %s\n", str1);
-    toggle_case_ascii(&str1[0]);
-    printf("After:  %s\n", &str1[0]);
-    toggle_case_ascii(str1); // Toggle back
-    printf("Toggle back: %s\n", str1);
-
-    // Method 2: Lookup table
-    char str2[] = "Data STRUCTURES in C";
-    printf("\nMethod 2 - Lookup Table:\n");
-    printf("Before: %s\n", str2);
-    toggle_case_lookup(str2);
-    printf("After:  %s\n", str2);
-
-    // Method 3: ctype.h
-    char str3[] = "ProGRamMinG";
-    printf("\nMethod 3 - ctype.h:\n");
-    printf("Before: %s\n", str3);
-    toggle_case_ctype(str3);
-    printf("After:  %s\n", str3);
-
-    // Method 4: Bitwise XOR
-    char str4[] = "BiTwIsE OpErAtIoN";
-    printf("\nMethod 4 - Bitwise XOR:\n");
-    printf("Before: %s\n", str4);
-    toggle_case_bitwise(str4);
-    printf("After:  %s\n", str4);
-
-    // Method 5: Ternary operator
-    char str5[] = "TerNaRy ExAmPLe";
-    printf("\nMethod 5 - Ternary Operator:\n");
-    printf("Before: %s\n", str5);
-    toggle_case_ternary(str5);
-    printf("After:  %s\n", str5);
-
-    // Demonstrate XOR properties
-    printf("\n=== XOR Toggle Properties ===\n");
-    char demo[] = "ABC";
-    printf("Original: %s\n", demo);
-    printf("Binary: A='%c' (0x%02X = 0b01000001)\n", demo[0], demo[0]);
-    demo[0] ^= 0x20;
-    printf("XOR 0x20: '%c' (0x%02X = 0b01100001) - toggled to lowercase\n", demo[0], demo[0]);
-    demo[0] ^= 0x20;
-    printf("XOR 0x20: '%c' (0x%02X = 0b01000001) - toggled back to uppercase\n", demo[0], demo[0]);
-
-    printf("\n=== Performance Notes ===\n");
-    printf("1. ASCII Arithmetic: Simple, readable, O(n) time\n");
-    printf("2. Lookup Table:     O(n*26) time, educational\n");
-    printf("3. ctype.h:         Portable, locale-aware\n");
-    printf("4. Bitwise XOR:     Fastest, single operation per char\n");
-    printf("5. Ternary:         Compact, one-liner logic\n");
 }
 
 // ============================================================================
@@ -760,7 +483,366 @@ void count_and_print_vowels_consonants_directly()
     printf("Consonants: %d\n", cCount);
 }
 
-// Demonstration function
+// count words, vowels, consonants in a string
+void count_words_vowels_consonants(const char *str, int *wordCount, int *vowelCount, int *consonantCount)
+{
+    *wordCount = 0;
+    *vowelCount = 0;
+    *consonantCount = 0;
+
+    int inWord = 0;
+
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        char ch = tolower((unsigned char)str[i]);
+
+        // Word counting
+        if (ch == ' ' || ch == '\t' || ch == '\n')
+        {
+            inWord = 0;
+        }
+        else
+        {
+            if (inWord == 0)
+            {
+                inWord = 1;
+                (*wordCount)++;
+            }
+
+            // Vowel and consonant counting
+            if (ch >= 'a' && ch <= 'z')
+            {
+                if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u')
+                {
+                    (*vowelCount)++;
+                }
+                else
+                {
+                    (*consonantCount)++;
+                }
+            }
+        }
+    }
+}
+
+// ============================================================================
+// TOGGLE CASE METHODS (Multiple Implementations)
+// ============================================================================
+
+// Method 1: Toggle using ASCII arithmetic
+void toggle_case_ascii(char *str)
+{
+    // A = 65, a = 97, difference = 32
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        if (str[i] >= 65 && str[i] <= 90)
+        {
+            // Uppercase → Lowercase
+            str[i] += 32;
+        }
+        else if (str[i] >= 97 && str[i] <= 122)
+        {
+            // Lowercase → Uppercase
+            str[i] -= 32;
+        }
+    }
+}
+
+// Method 2: Toggle using lookup tables
+void toggle_case_lookup(char *str)
+{
+    char upper[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    char lower[] = "abcdefghijklmnopqrstuvwxyz";
+
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        // Check if uppercase, convert to lowercase
+        for (int j = 0; j < 26; j++)
+        {
+            if (str[i] == upper[j])
+            {
+                str[i] = lower[j];
+                break;
+            }
+            else if (str[i] == lower[j])
+            {
+                str[i] = upper[j];
+                break;
+            }
+        }
+    }
+}
+
+// Method 3: Toggle using ctype.h
+void toggle_case_ctype(char *str)
+{
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        if (isupper((unsigned char)str[i]))
+        {
+            str[i] = tolower((unsigned char)str[i]);
+        }
+        else if (islower((unsigned char)str[i]))
+        {
+            str[i] = toupper((unsigned char)str[i]);
+        }
+    }
+}
+
+// Method 4: Toggle using bitwise XOR (fastest)
+void toggle_case_bitwise(char *str)
+{
+    // XOR with 0x20 (32) toggles bit 5, which flips case
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        if ((str[i] >= 'A' && str[i] <= 'Z') ||
+            (str[i] >= 'a' && str[i] <= 'z'))
+        {
+            str[i] ^= 0x20; // Toggle bit 5
+        }
+    }
+}
+
+// Method 5: Toggle using conditional operator (compact)
+void toggle_case_ternary(char *str)
+{
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        str[i] = (str[i] >= 'A' && str[i] <= 'Z') ? str[i] + 32 : (str[i] >= 'a' && str[i] <= 'z') ? str[i] - 32
+                                                                                                   : str[i];
+    }
+}
+
+// ============================================================================
+// DEMONSTRATION FUNCTIONS
+// ============================================================================
+
+// Demonstration of all methods:
+
+void demo_case_conversion_methods()
+{
+    printf("\n=== Case Conversion Methods Demonstration ===\n");
+
+    // Method 1: ASCII arithmetic
+    char str1[] = "hello world 123";
+    printf("\nMethod 1 - ASCII Arithmetic:\n");
+    printf("Before: %s\n", str1);
+    to_uppercase_ascii(str1);
+    printf("After:  %s\n", str1);
+
+    // Method 2: Lookup table
+    char str2[] = "data structures in c";
+    printf("\nMethod 2 - Lookup Table:\n");
+    printf("Before: %s\n", str2);
+    to_uppercase_lookup(str2);
+    printf("After:  %s\n", str2);
+
+    // Method 3: ctype.h
+    char str3[] = "programming in c";
+    printf("\nMethod 3 - ctype.h (toupper):\n");
+    printf("Before: %s\n", str3);
+    to_uppercase_ctype(str3);
+    printf("After:  %s\n", str3);
+
+    // Method 4: Bitwise operation
+    char str4[] = "efficient algorithm";
+    printf("\nMethod 4 - Bitwise Operation:\n");
+    printf("Before: %s\n", str4);
+    to_uppercase_bitwise(str4);
+    printf("After:  %s\n", str4);
+
+    // Demonstrate lowercase conversion
+    char str5[] = "CONVERT TO LOWERCASE";
+    printf("\nLowercase Conversion (ASCII):\n");
+    printf("Before: %s\n", str5);
+    to_lowercase_ascii(str5);
+    printf("After:  %s\n", str5);
+
+    char str6[] = "BITWISE LOWERCASE";
+    printf("\nLowercase Conversion (Bitwise):\n");
+    printf("Before: %s\n", str6);
+    to_lowercase_bitwise(str6);
+    printf("After:  %s\n", str6);
+
+    // Performance comparison explanation
+    printf("\n=== Performance Notes ===\n");
+    printf("1. ASCII Arithmetic:   Fast, simple, readable\n");
+    printf("2. Lookup Table:       O(n*26) time, educational value\n");
+    printf("3. ctype.h:           Most portable, locale-aware\n");
+    printf("4. Bitwise:           Fastest, ~2x faster than arithmetic\n");
+}
+
+void demo_basic_operations()
+{
+    printf("\n=== Basic String Operations ===\n");
+
+    char str1[] = "Hello, World!";
+    printf("Original string: %s\n", str1);
+    printf("Length: %d\n", str_length(str1));
+
+    char str2[50];
+    str_copy(str2, "C Programming");
+    printf("Copied string: %s\n", str2);
+
+    char str3[100] = "Hello";
+    str_concat(str3, " World");
+    printf("Concatenated: %s\n", str3);
+}
+
+void demo_case_operations()
+{
+    printf("\n=== Case Operations ===\n");
+
+    char str[] = "Data Structures in C";
+    printf("Original: %s\n", str);
+
+    char upper[50];
+    str_copy(upper, str);
+    str_to_upper(upper);
+    printf("Uppercase: %s\n", upper);
+
+    char lower[50];
+    str_copy(lower, str);
+    str_to_lower(lower);
+    printf("Lowercase: %s\n", lower);
+
+    char toggle[50];
+    str_copy(toggle, str);
+    str_toggle_case(toggle);
+    printf("Toggle case: %s\n", toggle);
+}
+
+void demo_string_analysis()
+{
+    printf("\n=== String Analysis ===\n");
+
+    char str[] = "Data Structures in C";
+    printf("String: %s\n", str);
+    printf("Vowels: %d\n", count_vowels(str));
+    printf("Consonants: %d\n", count_consonants(str));
+    printf("Words: %d\n", count_words(str));
+
+    char pal1[] = "madam";
+    char pal2[] = "hello";
+    printf("\n'%s' is palindrome: %s\n", pal1, is_palindrome(pal1) ? "Yes" : "No");
+    printf("'%s' is palindrome: %s\n", pal2, is_palindrome(pal2) ? "Yes" : "No");
+}
+
+void demo_advanced_operations()
+{
+    printf("\n=== Advanced Operations ===\n");
+
+    char str[] = "hello";
+    printf("Original: %s\n", str);
+    str_reverse(str);
+    printf("Reversed: %s\n", str);
+
+    printf("\nAnagram check:\n");
+    printf("'listen' and 'silent': %s\n", are_anagrams("listen", "silent") ? "Anagrams" : "Not anagrams");
+    printf("'hello' and 'world': %s\n", are_anagrams("hello", "world") ? "Anagrams" : "Not anagrams");
+
+    char dup[] = "programming";
+    printf("\nOriginal: %s\n", dup);
+    remove_duplicates(dup);
+    printf("After removing duplicates: %s\n", dup);
+}
+
+void demo_comparison()
+{
+    printf("\n=== String Comparison ===\n");
+
+    int cmp1 = str_compare("apple", "banana");
+    int cmp2 = str_compare("hello", "hello");
+    int cmp3 = str_compare("zebra", "apple");
+
+    printf("'apple' vs 'banana': %d (negative means first is less)\n", cmp1);
+    printf("'hello' vs 'hello': %d (zero means equal)\n", cmp2);
+    printf("'zebra' vs 'apple': %d (positive means first is greater)\n", cmp3);
+}
+
+void demo_toggle_case_methods()
+{
+
+    // Test toggle_case_ascii function
+    printf("\n=== Testing toggle_case_ascii Function ===\n");
+    char test1[] = "Hello World!";
+    printf("Original:     %s\n", test1);
+    toggle_case_ascii(test1);
+
+    printf("After toggle: %s\n", test1);
+    toggle_case_ascii(test1);
+    printf("Toggle back:  %s\n\n", test1);
+
+    char test2[] = "ProGRamMinG In C 2024";
+    printf("Original:     %s\n", test2);
+    toggle_case_ascii(test2);
+    printf("After toggle: %s\n", test2);
+
+    char test3[] = "ABC123xyz";
+    printf("\nOriginal:     %s\n", test3);
+    toggle_case_ascii(test3);
+    printf("After toggle: %s\n", test3);
+};
+
+void demo_toggle_case_methods()
+{
+    printf("\n=== Toggle Case Methods Demonstration ===\n");
+
+    // Method 1: ASCII arithmetic
+    char str1[] = "Hello World 123";
+    printf("\nMethod 1 - ASCII Arithmetic:\n");
+    printf("Before: %s\n", str1);
+    toggle_case_ascii(&str1[0]);
+    printf("After:  %s\n", &str1[0]);
+    toggle_case_ascii(str1); // Toggle back
+    printf("Toggle back: %s\n", str1);
+
+    // Method 2: Lookup table
+    char str2[] = "Data STRUCTURES in C";
+    printf("\nMethod 2 - Lookup Table:\n");
+    printf("Before: %s\n", str2);
+    toggle_case_lookup(str2);
+    printf("After:  %s\n", str2);
+
+    // Method 3: ctype.h
+    char str3[] = "ProGRamMinG";
+    printf("\nMethod 3 - ctype.h:\n");
+    printf("Before: %s\n", str3);
+    toggle_case_ctype(str3);
+    printf("After:  %s\n", str3);
+
+    // Method 4: Bitwise XOR
+    char str4[] = "BiTwIsE OpErAtIoN";
+    printf("\nMethod 4 - Bitwise XOR:\n");
+    printf("Before: %s\n", str4);
+    toggle_case_bitwise(str4);
+    printf("After:  %s\n", str4);
+
+    // Method 5: Ternary operator
+    char str5[] = "TerNaRy ExAmPLe";
+    printf("\nMethod 5 - Ternary Operator:\n");
+    printf("Before: %s\n", str5);
+    toggle_case_ternary(str5);
+    printf("After:  %s\n", str5);
+
+    // Demonstrate XOR properties
+    printf("\n=== XOR Toggle Properties ===\n");
+    char demo[] = "ABC";
+    printf("Original: %s\n", demo);
+    printf("Binary: A='%c' (0x%02X = 0b01000001)\n", demo[0], demo[0]);
+    demo[0] ^= 0x20;
+    printf("XOR 0x20: '%c' (0x%02X = 0b01100001) - toggled to lowercase\n", demo[0], demo[0]);
+    demo[0] ^= 0x20;
+    printf("XOR 0x20: '%c' (0x%02X = 0b01000001) - toggled back to uppercase\n", demo[0], demo[0]);
+
+    printf("\n=== Performance Notes ===\n");
+    printf("1. ASCII Arithmetic: Simple, readable, O(n) time\n");
+    printf("2. Lookup Table:     O(n*26) time, educational\n");
+    printf("3. ctype.h:         Portable, locale-aware\n");
+    printf("4. Bitwise XOR:     Fastest, single operation per char\n");
+    printf("5. Ternary:         Compact, one-liner logic\n");
+}
+
 void demo_vowel_consonant_counting()
 {
     printf("\n=== Vowel and Consonant Counting Demonstration ===\n");
@@ -806,48 +888,6 @@ void demo_vowel_consonant_counting()
     printf("3. Lookup Table:       Fastest, O(1) vowel check per char\n");
 }
 
-// count words, vowels, consonants in a string
-void count_words_vowels_consonants(const char *str, int *wordCount, int *vowelCount, int *consonantCount)
-{
-    *wordCount = 0;
-    *vowelCount = 0;
-    *consonantCount = 0;
-
-    int inWord = 0;
-
-    for (int i = 0; str[i] != '\0'; i++)
-    {
-        char ch = tolower((unsigned char)str[i]);
-
-        // Word counting
-        if (ch == ' ' || ch == '\t' || ch == '\n')
-        {
-            inWord = 0;
-        }
-        else
-        {
-            if (inWord == 0)
-            {
-                inWord = 1;
-                (*wordCount)++;
-            }
-
-            // Vowel and consonant counting
-            if (ch >= 'a' && ch <= 'z')
-            {
-                if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u')
-                {
-                    (*vowelCount)++;
-                }
-                else
-                {
-                    (*consonantCount)++;
-                }
-            }
-        }
-    }
-}
-
 void demoCountingWordsVowelsConsonants()
 {
     printf("\n=== Counting Words, Vowels, and Consonants ===\n");
@@ -861,21 +901,6 @@ void demoCountingWordsVowelsConsonants()
     printf("Words: %d, Vowels: %d, Consonants: %d\n", words, vowels, consonants);
 }
 
-void count_and_print_words_directly()
-{
-
-    char A[] = "abcd efg hijklmnop qrstuvw     xyz";
-
-    int wCount = 1;
-
-    for (int i = 0; A[i] != '\0'; i++)
-    {
-        if (A[i] == ' ' && A[i - 1] != ' ')
-            wCount++;
-    }
-    printf("Words: %d\n", wCount);
-}
-
 // ============================================================================
 // MAIN clang -o string_app Strings/String.c && ./string_app
 // ============================================================================
@@ -883,42 +908,29 @@ int main(int argc, const char *argv[])
 {
     printf("=== String Operations Demonstration ===\n");
 
-    // Test toggle_case_ascii function
-    printf("\n=== Testing toggle_case_ascii Function ===\n");
-    char test1[] = "Hello World!";
-    printf("Original:     %s\n", test1);
-    toggle_case_ascii(test1);
-
-    printf("After toggle: %s\n", test1);
-    toggle_case_ascii(test1);
-    printf("Toggle back:  %s\n\n", test1);
-
-    char test2[] = "ProGRamMinG In C 2024";
-    printf("Original:     %s\n", test2);
-    toggle_case_ascii(test2);
-    printf("After toggle: %s\n", test2);
-
-    char test3[] = "ABC123xyz";
-    printf("\nOriginal:     %s\n", test3);
-    toggle_case_ascii(test3);
-    printf("After toggle: %s\n", test3);
-
     printf("\n");
     demo_basic_operations();
+    printf("\n");
     demo_case_operations();
+    printf("\n");
     demo_string_analysis();
+    printf("\n");
     demo_advanced_operations();
+    printf("\n");
     demo_comparison();
+    printf("\n");
     demo_case_conversion_methods();
+    printf("\n");
     demo_toggle_case_methods();
+    printf("\n");
     demo_vowel_consonant_counting();
+    printf("\n");
     demoCountingWordsVowelsConsonants();
-
-    printf("\n ==== HHard coded====\n");
+    printf("\n");
     count_and_print_vowels_consonants_directly();
-
-    printf("\n ==== count Wortds====\n");
+    printf("\n");
     count_and_print_words_directly();
+    printf("\n");
 
     printf("\n=== End of Program ===\n");
     return 0;
