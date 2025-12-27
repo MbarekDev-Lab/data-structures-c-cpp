@@ -614,6 +614,199 @@ void toggle_case_ternary(char *str)
 }
 
 // ============================================================================
+// VALIDATION OF STRING METHODS
+// ============================================================================
+
+// Validate string - check character types and return validation result
+int validate_string_methods()
+{
+    char *name = "Ani?32!";
+    printf("\n=== String Validation ===\n");
+    printf("Original String: %s\n", name);
+
+    int alphaCount = 0;
+    int digitCount = 0;
+    int specialCount = 0;
+
+    for (int i = 0; name[i] != '\0'; i++)
+    {
+        char ch = name[i];
+
+        // Check for special characters first
+        if (!(ch >= 'A' && ch <= 'Z') && !(ch >= 'a' && ch <= 'z') && !(ch >= '0' && ch <= '9'))
+        {
+            printf("'%c' is a special character.\n", ch);
+            specialCount++;
+        }
+        // Check for alphabetic characters
+        else if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'))
+        {
+            printf("'%c' is an alphabetic character.\n", ch);
+            alphaCount++;
+        }
+        // Check for digits
+        else if (ch >= '0' && ch <= '9')
+        {
+            printf("'%c' is a digit.\n", ch);
+            digitCount++;
+        }
+    }
+
+    // Print summary
+    printf("\nSummary:\n");
+    printf("Alphabetic characters: %d\n", alphaCount);
+    printf("Digits: %d\n", digitCount);
+    printf("Special characters: %d\n", specialCount);
+
+    // Return validation result (1 = valid, 0 = has special chars)
+    return (specialCount == 0) ? 1 : 0;
+}
+
+// Alternative: Check if string is valid (only letters and digits)
+int is_valid_alphanumeric(const char *str)
+{
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        char ch = str[i];
+        if (!((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')))
+        {
+            return 0; // Invalid - contains non-alphanumeric
+        }
+    }
+    return 1; // Valid - all alphanumeric
+}
+
+// Alternative: Check if string contains only letters
+int is_valid_alphabetic(const char *str)
+{
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        char ch = str[i];
+        if (!((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')))
+        {
+            return 0; // Invalid - contains non-alphabetic
+        }
+    }
+    return 1; // Valid - all alphabetic
+}
+
+// Demonstration of validation functions
+void demo_string_validation()
+{
+    printf("\n=== String Validation Demonstration ===\n");
+
+    // Test validate_string_methods
+    int result = validate_string_methods();
+    printf("\nValidation result: %s\n", result ? "VALID (no special chars)" : "INVALID (has special chars)");
+
+    // Test different strings
+    const char *test_strings[] = {
+        "Hello123",
+        "OnlyLetters",
+        "With Spaces",
+        "Special!@#",
+        "Mix3d_Ch4rs"};
+
+    printf("\n=== Testing Multiple Strings ===\n");
+    for (int i = 0; i < 5; i++)
+    {
+        printf("\nString: \"%s\"\n", test_strings[i]);
+        printf("  Alphanumeric: %s\n", is_valid_alphanumeric(test_strings[i]) ? "YES" : "NO");
+        printf("  Alphabetic only: %s\n", is_valid_alphabetic(test_strings[i]) ? "YES" : "NO");
+    }
+}
+
+// ============================================================================
+// STRING REVERSAL METHODS
+// ============================================================================
+void reverse_string_inplace(char *str)
+{
+    int left = 0;
+    int right = str_length(str) - 1;
+
+    while (left < right)
+    {
+        char temp = str[left];
+        str[left] = str[right];
+        str[right] = temp;
+        left++;
+        right--;
+    }
+}
+
+void reverse_string_new(const char *str, char *revStr)
+{
+
+    char A[] = "Python";
+    char B[7];
+    int i, j;
+
+    // find length
+    for (i = 0; A[i] != '\0'; i++)
+    {
+        ;
+    }
+    // i is length, so start from last character
+    i = i - 1;
+
+    for (j = 0; i >= 0; i--, j++)
+    {
+        B[j] = A[i];
+    }
+
+    B[j] = '\0';
+    printf("Reversed string: %s\n", B);
+}
+
+void reverse_string_new(const char *str, char *revStr)
+{
+
+    char A[] = "Python";
+    char B[7];
+    int i, j;
+
+    // find length
+    for (i = 0; A[i] != '\0'; i++)
+    {
+        ;
+    }
+    // i is length, so start from last character
+    i = i - 1;
+
+    for (j = 0; i >= 0; i--, j++)
+    {
+        B[j] = A[i];
+    }
+
+    B[j] = '\0';
+    printf("Reversed string: %s\n", B);
+}
+
+void reverse_string_without_temp_arr()
+{
+
+    char A[] = "Python";
+    char t;
+    int i, j;
+
+    // find length
+    for (j = 0; A[j] != '\0'; j++)
+    {
+        ;
+    }
+    // i is length, so start from last character
+    j = j - 1;
+
+    for (i = 0; i < j; i++, j--)
+    {
+        t = A[i];
+        A[i] = A[j];
+        A[j] = t;
+    }
+    printf("Reversed string: %s\n", A);
+}
+
+// ============================================================================
 // DEMONSTRATION FUNCTIONS
 // ============================================================================
 
@@ -931,6 +1124,7 @@ int main(int argc, const char *argv[])
     printf("\n");
     count_and_print_words_directly();
     printf("\n");
+    demo_string_validation();
 
     printf("\n=== End of Program ===\n");
     return 0;
