@@ -592,8 +592,8 @@ void demo_toggle_case_methods()
     char str1[] = "Hello World 123";
     printf("\nMethod 1 - ASCII Arithmetic:\n");
     printf("Before: %s\n", str1);
-    toggle_case_ascii(str1);
-    printf("After:  %s\n", str1);
+    toggle_case_ascii(&str1[0]);
+    printf("After:  %s\n", &str1[0]);
     toggle_case_ascii(str1); // Toggle back
     printf("Toggle back: %s\n", str1);
 
@@ -644,9 +644,241 @@ void demo_toggle_case_methods()
 }
 
 // ============================================================================
-// MAIN clang -o string_app Strings/String.c && ./string_app
+//  VOWEL AND CONSONANT COUNTING
 // ============================================================================
 
+// Method 1: Count vowels and consonants using output parameters (modern approach)
+void count_vowels_consonants(const char *str, int *vowelCount, int *consonantCount)
+{
+    *vowelCount = 0;
+    *consonantCount = 0;
+
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        char ch = tolower((unsigned char)str[i]);
+
+        // Check if it's a letter
+        if (ch >= 'a' && ch <= 'z')
+        {
+            // Check if vowel
+            if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u')
+            {
+                (*vowelCount)++;
+            }
+            else
+            {
+                (*consonantCount)++;
+            }
+        }
+    }
+}
+
+// Method 2: Standalone function that prints results directly
+void count_and_print_vowels_consonants(const char *str)
+{
+    int vCount = 0;
+    int cCount = 0;
+
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        char ch = tolower((unsigned char)str[i]);
+
+        // Check for vowels (both cases handled by tolower)
+        if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u')
+        {
+            vCount++;
+        }
+        // Check for consonants
+        else if ((ch >= 'a' && ch <= 'z'))
+        {
+            cCount++;
+        }
+    }
+
+    printf("String: \"%s\"\n", str);
+    printf("Vowels: %d\n", vCount);
+    printf("Consonants: %d\n", cCount);
+}
+
+// Method 3: Using lookup table (fastest for repeated checks)
+void count_vowels_consonants_lookup(const char *str, int *vowelCount, int *consonantCount)
+{
+    // Lookup table for vowels (1 = vowel, 0 = not vowel)
+    int is_vowel[26] = {
+        1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, // a-m
+        0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0  // n-z
+    };
+
+    *vowelCount = 0;
+    *consonantCount = 0;
+
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        char ch = tolower((unsigned char)str[i]);
+
+        if (ch >= 'a' && ch <= 'z')
+        {
+            if (is_vowel[ch - 'a'])
+                (*vowelCount)++;
+            else
+                (*consonantCount)++;
+        }
+    }
+}
+
+// Method 4: Standalone function that prints results directly
+void count_and_print_vowels_consonants_directly()
+{
+    char A[] = "abcd efg hijklmnop qrstuvw xyz";
+
+    int vCount = 0;
+    int cCount = 0;
+
+    for (int i = 0; A[i] != '\0'; i++)
+    {
+        char ch = tolower((unsigned char)A[i]); // Normalize to lowercase
+
+        // Only process alphabetic characters
+        if ((ch >= 'a' && ch <= 'z'))
+        {
+            // Check if vowel
+            if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u')
+            {
+                vCount++;
+            }
+            else
+            {
+                // It's a consonant
+                cCount++;
+            }
+        }
+        // Ignore spaces, numbers, punctuation
+    }
+
+    printf("String: \"%s\"\n", A);
+    printf("Vowels: %d\n", vCount);
+    printf("Consonants: %d\n", cCount);
+}
+
+// Demonstration function
+void demo_vowel_consonant_counting()
+{
+    printf("\n=== Vowel and Consonant Counting Demonstration ===\n");
+
+    // Method 1: Using output parameters
+    const char *test1 = "How are you";
+    int vowels, consonants;
+    count_vowels_consonants(test1, &vowels, &consonants);
+    printf("\nMethod 1 - Output Parameters:\n");
+    printf("String: \"%s\"\n", test1);
+    printf("Vowels: %d, Consonants: %d\n", vowels, consonants);
+
+    // Method 2: Direct printing
+    printf("\nMethod 2 - Direct Printing:\n");
+    count_and_print_vowels_consonants("Programming in C");
+
+    // Method 3: Lookup table
+    const char *test3 = "Data Structures and Algorithms";
+    count_vowels_consonants_lookup(test3, &vowels, &consonants);
+    printf("\nMethod 3 - Lookup Table:\n");
+    printf("String: \"%s\"\n", test3);
+    printf("Vowels: %d, Consonants: %d\n", vowels, consonants);
+
+    // Test with various strings
+    printf("\n=== Multiple Test Cases ===\n");
+    const char *tests[] = {
+        "Hello World!",
+        "AEIOU",
+        "bcdfg",
+        "C Programming 2024",
+        "xyz123ABC"};
+
+    for (int i = 0; i < 5; i++)
+    {
+        count_vowels_consonants(tests[i], &vowels, &consonants);
+        printf("%-25s -> Vowels: %2d, Consonants: %2d\n",
+               tests[i], vowels, consonants);
+    }
+
+    printf("\n=== Performance Comparison ===\n");
+    printf("1. Output Parameters:  Flexible, can use counts elsewhere\n");
+    printf("2. Direct Printing:    Simple, good for one-time use\n");
+    printf("3. Lookup Table:       Fastest, O(1) vowel check per char\n");
+}
+
+// count words, vowels, consonants in a string
+void count_words_vowels_consonants(const char *str, int *wordCount, int *vowelCount, int *consonantCount)
+{
+    *wordCount = 0;
+    *vowelCount = 0;
+    *consonantCount = 0;
+
+    int inWord = 0;
+
+    for (int i = 0; str[i] != '\0'; i++)
+    {
+        char ch = tolower((unsigned char)str[i]);
+
+        // Word counting
+        if (ch == ' ' || ch == '\t' || ch == '\n')
+        {
+            inWord = 0;
+        }
+        else
+        {
+            if (inWord == 0)
+            {
+                inWord = 1;
+                (*wordCount)++;
+            }
+
+            // Vowel and consonant counting
+            if (ch >= 'a' && ch <= 'z')
+            {
+                if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u')
+                {
+                    (*vowelCount)++;
+                }
+                else
+                {
+                    (*consonantCount)++;
+                }
+            }
+        }
+    }
+}
+
+void demoCountingWordsVowelsConsonants()
+{
+    printf("\n=== Counting Words, Vowels, and Consonants ===\n");
+
+    const char *testStr = "Data Structures in C Programming";
+    int words, vowels, consonants;
+
+    count_words_vowels_consonants(testStr, &words, &vowels, &consonants);
+
+    printf("String: \"%s\"\n", testStr);
+    printf("Words: %d, Vowels: %d, Consonants: %d\n", words, vowels, consonants);
+}
+
+void count_and_print_words_directly()
+{
+
+    char A[] = "abcd efg hijklmnop qrstuvw     xyz";
+
+    int wCount = 1;
+
+    for (int i = 0; A[i] != '\0'; i++)
+    {
+        if (A[i] == ' ' && A[i - 1] != ' ')
+            wCount++;
+    }
+    printf("Words: %d\n", wCount);
+}
+
+// ============================================================================
+// MAIN clang -o string_app Strings/String.c && ./string_app
+// ============================================================================
 int main(int argc, const char *argv[])
 {
     printf("=== String Operations Demonstration ===\n");
@@ -679,6 +911,14 @@ int main(int argc, const char *argv[])
     demo_comparison();
     demo_case_conversion_methods();
     demo_toggle_case_methods();
+    demo_vowel_consonant_counting();
+    demoCountingWordsVowelsConsonants();
+
+    printf("\n ==== HHard coded====\n");
+    count_and_print_vowels_consonants_directly();
+
+    printf("\n ==== count Wortds====\n");
+    count_and_print_words_directly();
 
     printf("\n=== End of Program ===\n");
     return 0;
