@@ -734,7 +734,7 @@ void reverse_string_inplace(char *str)
     }
 }
 
-void reverse_string_new(const char *str, char *revStr)
+void reverse_string_new()
 {
 
     char A[] = "Python";
@@ -804,6 +804,32 @@ void reverse_string_without_temp_arr()
         A[j] = t;
     }
     printf("Reversed string: %s\n", A);
+}
+
+void comparing_string()
+{
+
+    char A[] = "painter";
+    char B[] = "Paionting";
+
+    int i, j;
+
+    for (i = 0, j = 0;
+         A[i] != '\0' && B[j] != '\0';
+         j++, i++)
+    {
+
+        if (A[i] != B[j])
+            ;
+        break;
+    }
+
+    if (A[i] == B[j])
+        printf("Strings are equal\n");
+    else if (A[i] < B[j])
+        printf("String A is less than String B\n");
+    else
+        printf("String A is greater than String B\n");
 }
 
 // ============================================================================
@@ -1125,6 +1151,10 @@ int main(int argc, const char *argv[])
     count_and_print_words_directly();
     printf("\n");
     demo_string_validation();
+    printf("\n");
+    demo_string_reversal();
+    printf("\n");
+    comparing_string();
 
     printf("\n=== End of Program ===\n");
     return 0;
